@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 abstract class Lenkeliste <T> implements Liste<T> {
 
     protected Node forste;   // Forste
@@ -36,6 +39,45 @@ abstract class Lenkeliste <T> implements Liste<T> {
             }else{return false;}
         }
     }
+
+    public class LenkelisteIterator<T> implements Iterator<T> {
+        int teller = 0;
+        Node telling = forste;
+        @Override
+        public boolean hasNext() {
+            // Node tmp = forste;
+            if (telling.neste != null) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public T next() {
+            if (! hasNext()) {
+                throw new NoSuchElementException("Ingen neste Node");
+            }
+            for (int i = teller; i < stoerrelse(); i++) {
+                if (telling.neste != null) {  
+                    telling = telling.neste;                 
+                    return (T) telling.data;
+                }
+            }
+            telling = telling.neste;
+            return null;
+            
+        }
+
+    }
+
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LenkelisteIterator<T>();
+        }
+    
+        
+    
     
 
     @Override   
@@ -105,3 +147,4 @@ abstract class Lenkeliste <T> implements Liste<T> {
 
     
 }
+
